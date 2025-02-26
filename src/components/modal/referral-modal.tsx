@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { z } from "zod";
-import { User, X } from "lucide-react";
+import { Loader, User, X } from "lucide-react";
 
 // Custom function to validate names
 const nameRegex = /^[A-Za-z\s]+$/;
@@ -28,18 +28,25 @@ const referralSchema = z.object({
 
 export const ReferralModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) => {
     const [formErrors, setFormErrors] = useState<{ [key: string]: string }>({});
+    const [isSuccess, setIsSuccess] = useState(false);
+    const [errorMessage, setErrorMessage] = useState<string | null>(null);
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        setIsSubmitting(true);
+        setErrorMessage(null);
+
         const formData = new FormData(e.currentTarget);
         const data = Object.fromEntries(formData.entries());
 
         try {
+            // Validate form data
             referralSchema.parse(data);
 
-            // If validation passes, submit the form data
+            // Submit form data to the server
             const res = await fetch("http://localhost:8080/api/referrals", {
-                method: "post",
+                method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
@@ -47,12 +54,19 @@ export const ReferralModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: (
             });
 
             const resData = await res.json();
-            console.log({ resData });
 
-            onClose();
-            setFormErrors({});
+            if (!res.ok) {
+                throw new Error(resData.error || "Failed to submit referral");
+            }
+
+            // Handle success
+            setIsSuccess(true);
+            setTimeout(() => {
+                onClose();
+                setIsSuccess(false);
+            }, 2000); // Close modal after 2 seconds
         } catch (error) {
-            // if validation fails
+            // Handle validation errors
             if (error instanceof z.ZodError) {
                 const errors: { [key: string]: string } = {};
                 error.errors.forEach((err) => {
@@ -61,10 +75,14 @@ export const ReferralModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: (
                     }
                 });
                 setFormErrors(errors);
-                return;
+            } else if (error instanceof Error) {
+                // Handle server errors
+                setErrorMessage(error.message);
+            } else {
+                setErrorMessage("An unexpected error occurred. Please try again.");
             }
-
-            console.log(error);
+        } finally {
+            setIsSubmitting(false);
         }
     };
 
@@ -92,6 +110,21 @@ export const ReferralModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: (
                             <X className="w-5 h-5" />
                         </button>
                     </div>
+
+                    {/* Success Message */}
+                    {isSuccess && (
+                        <div className="mb-4 p-4 bg-green-50 text-green-700 rounded-lg">
+                            <p>🎉 Referral submitted successfully!</p>
+                        </div>
+                    )}
+
+                    {/* Error Message */}
+                    {errorMessage && (
+                        <div className="mb-4 p-4 bg-red-50 text-red-700 rounded-lg">
+                            <p>❌ {errorMessage}</p>
+                        </div>
+                    )}
+
                     <form onSubmit={handleSubmit} className="space-y-4">
                         <div>
                             <label
@@ -196,11 +229,16 @@ export const ReferralModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: (
                             )}
                         </div>
                         <button
+                            disabled={isSubmitting}
                             type="submit"
-                            className="w-full py-3 px-6 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg 
+                            className="w-max block ml-auto disabled:opacity-50 disabled:cursor-not-allowed py-3 px-6 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg 
             transition-colors duration-200 focus:outline-none focus:ring-4 focus:ring-blue-500/30"
                         >
-                            Submit Referral
+                            {isSubmitting ? (
+                                <Loader className="animate-spin w-5 h-5" />
+                            ) : (
+                                "Submit Referral"
+                            )}
                         </button>
                     </form>
                 </div>
