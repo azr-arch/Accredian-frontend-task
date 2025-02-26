@@ -1,50 +1,44 @@
-# React + TypeScript + Vite
+# Refer & Earn - Client App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This is the frontend application for the **Refer & Earn** platform, built with **React**, **TypeScript**, and **Tailwind CSS**. It allows users to refer friends for courses and track their referrals.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **Referral Form**: Submit referrals with referrer and candidate details.
+- **Responsive Design**: Works seamlessly on all devices.
+- **Form Validation**: Ensures all required fields are filled correctly.
+- **Success/Error States**: Displays appropriate messages after form submission.
 
-## Expanding the ESLint configuration
+## Technologies Used
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+- **React**: Frontend library for building user interfaces.
+- **TypeScript**: Adds static typing to JavaScript.
+- **Tailwind CSS**: Utility-first CSS framework for styling.
 
-- Configure the top-level `parserOptions` property like this:
+## Getting Started
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+### Prerequisites
+
+- Node.js (v18 or higher)
+- npm (v9 or higher)
+
+### Installation
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/azr-arch/Accredian-frontend-task.git
+
+2. Navigate to the project directory:
+   ```bash
+   cd client
+3. Install and run:
+   ```bash
+   npm install && npm run dev
+
+### Folder structure
 ```
-
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
-
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
-
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+src/
+    ├── components/       # Reusable UI components
+    ├── sections/            # Application sections
+    ├── App.tsx           # Main application component
+    └── index.tsx         # Entry point
