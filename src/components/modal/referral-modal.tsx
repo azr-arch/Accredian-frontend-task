@@ -11,8 +11,6 @@ const validateName = (name: string) => {
     return nameRegex.test(name);
 };
 
-console.log({ URL });
-
 const referralSchema = z.object({
     referrerName: z
         .string()
