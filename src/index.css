@@ -1,1 +1,53 @@
+@import url("https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap");
+
 @import "tailwindcss";
+
+@layer base {
+    * {
+        @apply border-neutral-200;
+    }
+
+    *:hover {
+        @apply transition-colors;
+    }
+
+    button {
+        @apply cursor-pointer;
+    }
+
+    body {
+        font-family: "Geist", serif;
+        font-optical-sizing: auto;
+        font-style: normal;
+    }
+
+    .animate-float {
+        animation: float 3s ease-in-out infinite;
+    }
+
+    .animate-float-delay-1 {
+        animation: float 3s ease-in-out 1s infinite;
+    }
+
+    .animate-float-delay-2 {
+        animation: float 3s ease-in-out 2s infinite;
+    }
+}
+
+@keyframes float {
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+/* Utilities */
+@utility container {
+    padding: 2rem;
+    max-width: 1400px;
+    margin-inline: auto;
+}
