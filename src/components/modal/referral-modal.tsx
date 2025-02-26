@@ -3,12 +3,15 @@ import { z } from "zod";
 import { Loader, User, X } from "lucide-react";
 
 const SERVER_URL = import.meta.env.VITE_SERVER_URL;
+const URL = `${SERVER_URL}/api/referrals`;
 
 // Custom function to validate names
 const nameRegex = /^[A-Za-z\s]+$/;
 const validateName = (name: string) => {
     return nameRegex.test(name);
 };
+
+console.log({ URL });
 
 const referralSchema = z.object({
     referrerName: z
@@ -47,7 +50,7 @@ export const ReferralModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: (
             referralSchema.parse(data);
 
             // Submit form data to the server
-            const res = await fetch(`${SERVER_URL}/api/referrals`, {
+            const res = await fetch(URL, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
