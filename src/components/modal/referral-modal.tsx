@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { z } from "zod";
 import { Loader, User, X } from "lucide-react";
 
+const SERVER_URL = import.meta.env.VITE_SERVER_URL;
+
 // Custom function to validate names
 const nameRegex = /^[A-Za-z\s]+$/;
 const validateName = (name: string) => {
@@ -45,7 +47,7 @@ export const ReferralModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: (
             referralSchema.parse(data);
 
             // Submit form data to the server
-            const res = await fetch("http://localhost:8080/api/referrals", {
+            const res = await fetch(`${SERVER_URL}/api/referrals`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
